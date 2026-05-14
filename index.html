@@ -388,7 +388,7 @@
     <div class="grain"></div>
 
     <!-- BIOMETRIC INTRO (UNTOUCHED) -->
-    <div id="intro-overlay">
+    <div id="intro-overlay" style="display:none;">
         <div class="biometric-container">
             <div class="intro-message-box">
                 <p class="curiosity-text">[STATUS]: GATHERING NIGHTS OF SILENCE... 😊</p>
@@ -520,7 +520,72 @@
                     errorText.classList.add('show');
                 }
             }
-        });
+        /* LOCK SYSTEM */
+
+let lock = document.createElement("div");
+
+lock.id = "lockScreen";
+
+lock.style = `
+position:fixed;
+inset:0;
+background:black;
+z-index:999999;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+color:white;
+font-family:Arial;
+text-align:center;
+`;
+
+lock.innerHTML = `
+<h1>🔒 Vault Locked</h1>
+<p>Opens at 9 PM</p>
+<div id="timer" style="font-size:40px;color:#ff1493;"></div>
+`;
+
+document.body.appendChild(lock);
+
+function updateTimer(){
+
+let now = new Date();
+
+let target = new Date();
+
+target.setHours(21,0,0,0);
+
+let diff = target - now;
+
+if(diff <= 0){
+
+document.getElementById("lockScreen").style.display = "none";
+
+document.getElementById("intro-overlay").style.display = "flex";
+
+return;
+
+}
+
+let h = Math.floor(diff / 3600000);
+
+let m = Math.floor((diff % 3600000) / 60000);
+
+let s = Math.floor((diff % 60000) / 1000);
+
+document.getElementById("timer").innerText =
+h + "h " + m + "m " + s + "s";
+
+}
+
+setInterval(updateTimer,1000);
+
+updateTimer();
+
+document.body.onclick = () => {
+alert("⚠️ Access Denied Until 9 PM");
+};});
     </script>
 </body>
 </html>
